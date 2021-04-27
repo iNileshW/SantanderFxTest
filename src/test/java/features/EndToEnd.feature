@@ -1,4 +1,6 @@
 Feature: End to End test
+
+  @End2End
   Scenario: Validation of prices
     Given FX price feed of spot prices from the market is connected
     When price is picked for an instrument
