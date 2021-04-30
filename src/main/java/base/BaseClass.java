@@ -17,7 +17,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.IllegalFormatException;
 import java.util.Iterator;
 import java.util.List;
@@ -25,51 +24,7 @@ import java.util.List;
 public class BaseClass {
     PriceFeed priceFeed = new PriceFeed();
     String csvTestData = "src/main/testdata/FxFeed.csv";
-
-    public void readcsv() throws IOException, CsvException {
-        CSVReader reader = new CSVReader(new FileReader(csvTestData));
-        String[] feed;
-        List<String[]> a = reader.readAll();
-        feed = reader.readNext();
-        //while ((feed = reader.readNext())!=null){
-
-        for (int i = 0; i < a.size(); i++) {
-            String[] id = a.get(i);
-            System.out.println(id);
-            String instrument = feed[i + 1];
-            System.out.println(instrument);
-            float bidPrice = Float.parseFloat(feed[i + 2]);
-            System.out.println(bidPrice);
-            float askPrice = Float.parseFloat(feed[i + 3]);
-            System.out.println(askPrice);
-            //Date time = feed[i+4];
-
-            //  }
-        }
-    }
-
     static CSVReader reader;
-
-    public PriceFeed latest() throws IOException, CsvValidationException {
-        reader = new CSVReader(new FileReader(csvTestData));
-        String[] feed;
-        feed = reader.readNext();
-
-        for (String feeds : feed) {
-            System.out.println(feeds);
-        }
-        //System.out.println(feed);
-        return priceFeed;
-    }
-
-    public void CSVIterator(CSVReader csvReader) {
-        Iterator<String[]> rows = csvReader.iterator();
-        for (Iterator<String[]> it = rows; it.hasNext(); ) {
-            String[] r = it.next();
-            System.out.println(Arrays.stream(new String[]{r[3]}));
-        }
-
-    }
 
     public PriceFeed pickUpPrice() {
         try (
@@ -88,19 +43,6 @@ public class BaseClass {
 
             Iterator<PriceFeed> priceFeedIterator = csvToBean.iterator();
             PriceFeed priceFeed = priceFeedIterator.next();
-
-            /*do {
-                /if (!(priceFeed.getId().equals("…"))) {
-                    System.out.println("id : " + priceFeed.getId());
-                    System.out.println("Instrument : " + priceFeed.getInstrument());
-                    System.out.println("Bid : " + priceFeed.getBid());
-                    System.out.println("Ask : " + priceFeed.getAsk());
-                    System.out.println("Time : " + priceFeed.getFtime());
-                    System.out.println("---------------------------");
-                } else {
-                    priceFeedIterator.next();
-                }
-            }while (priceFeedIterator.hasNext());*/
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,14 +65,15 @@ public class BaseClass {
                     .build();
 
             Iterator<PriceFeed> priceFeedIterator = csvToBean.iterator();
-            priceFeed = priceFeedIterator.next();
-            do {
-                if (!(priceFeed.getId().equals("…"))) {
-                    boolean idCheck = isInteger(priceFeed.getId());
-                    boolean instrumentCheck = isValidString(priceFeed.getId());
-                    boolean bidPriceCheck = isValidDouble(priceFeed.getBid());
-                    boolean askPriceCheck = isValidDouble(priceFeed.getAsk());
-                    boolean timeCheck = isValidString(priceFeed.getFtime());
+
+            while (priceFeedIterator.hasNext()) {
+                PriceFeed priceFeed1 = priceFeedIterator.next();
+                if (!(priceFeed1.getId().equals("…"))) {
+                    boolean idCheck = isInteger(priceFeed1.getId());
+                    boolean instrumentCheck = isValidString(priceFeed1.getId());
+                    boolean bidPriceCheck = isValidDouble(priceFeed1.getBid());
+                    boolean askPriceCheck = isValidDouble(priceFeed1.getAsk());
+                    boolean timeCheck = isValidString(priceFeed1.getFtime());
                     if (!(idCheck | instrumentCheck | bidPriceCheck | askPriceCheck | timeCheck)) {
                         Assert.fail("Sequence Check Test Fail");
                     } else {
@@ -139,7 +82,7 @@ public class BaseClass {
                 } else {
                     priceFeedIterator.next();
                 }
-            } while (priceFeedIterator.hasNext());
+            }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
@@ -208,15 +151,10 @@ public class BaseClass {
         a = reader.readNext();
         //while ((feed = reader.readNext())!=null){
         int validRecord = 1;
-        System.out.println(a.length);
         String id = a[0];
-        System.out.println(id);
         String instrument = a[1];
-        System.out.println(instrument);
         double bidPrice = Double.parseDouble(a[2]);
-        System.out.println(bidPrice);
         double askPrice = Double.parseDouble(a[3]);
-        System.out.println(askPrice);
         String ftime = a[4];
         PriceFeed p = new PriceFeed(id, instrument, bidPrice, askPrice, ftime);
         return p;
@@ -233,18 +171,12 @@ public class BaseClass {
         String[] feed;
         List<String[]> a = reader.readAll();
         int csvSize = a.size();
-        //while ((feed = reader.readNext())!=null){
         int validRecord = 1;
-        System.out.println(csvSize);
         String[] readRecord = a.get(a.size() - 1);
         String id = readRecord[0];
-        System.out.println(id);
         String instrument = readRecord[1];
-        System.out.println(instrument);
         double bidPrice = Double.parseDouble(readRecord[2]);
-        System.out.println(bidPrice);
         double askPrice = Double.parseDouble(readRecord[3]);
-        System.out.println(askPrice);
         String ftime = readRecord[4];
         PriceFeed latestFeed = new PriceFeed(id, instrument, bidPrice, askPrice, ftime);
         return latestFeed;
@@ -280,5 +212,3 @@ public class BaseClass {
         return oldPriceFeed;
     }
 }
-
-

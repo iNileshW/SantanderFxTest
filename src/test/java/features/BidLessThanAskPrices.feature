@@ -1,6 +1,6 @@
 Feature: Validate each price to ensure that bid < ask
 
-  @RegressionTest
+  @SmokeTest
   Scenario: Validation of bid less than ask price
     Given FX price feed of spot prices from the market is connected
     When valid price is picked for an instrument
