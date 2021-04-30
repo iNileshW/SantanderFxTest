@@ -103,13 +103,6 @@
             <artifactId>cucumber-reporting</artifactId>
             <version>5.5.2</version>
         </dependency>
-<!--
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>3.141.59</version>
-        </dependency>
--->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
