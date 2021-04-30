@@ -2,6 +2,5 @@ Feature: Latest price for a given instrument is used
   @RegressionTest
   Scenario: Validation of latest instrument price picked
     Given  FX price feed of spot prices from the market is connected
-    When price is picked for an instrument
+    When valid price is picked for an instrument
     Then price picked is latest
-    And old price is not considered
